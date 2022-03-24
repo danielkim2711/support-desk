@@ -1,5 +1,10 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { createTicket, reset } from '../features/tickets/ticketSlice';
+import { toast } from 'react-toastify';
+import Spinner from '../components/Spinner';
+import { FaArrowCircleLeft } from 'react-icons/fa';
 
 const NewTicket = () => {
   const { user } = useSelector((state) => state.auth);
@@ -7,12 +12,46 @@ const NewTicket = () => {
   const [product, setProduct] = useState('iPhone');
   const [description, setDescription] = useState('');
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isError, isSuccess, isLoading, message } = useSelector(
+    (state) => state.ticket
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess) {
+      dispatch(reset());
+      navigate('/tickets');
+    }
+
+    dispatch(reset());
+  }, [isError, isSuccess, message, navigate, dispatch]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const ticketData = {
+      product,
+      description,
+    };
+
+    dispatch(createTicket(ticketData));
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>
+      <Link to='/' className='btn btn-reverse btn-back'>
+        <FaArrowCircleLeft />
+      </Link>
       <section className='heading'>
         <h1>Create New Ticket</h1>
         <p>Please fill out the form below</p>
