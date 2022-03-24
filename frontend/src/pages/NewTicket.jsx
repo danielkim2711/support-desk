@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { createTicket, reset } from '../features/tickets/ticketSlice';
 import { toast } from 'react-toastify';
+import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
-import { FaArrowCircleLeft } from 'react-icons/fa';
 
 const NewTicket = () => {
   const { user } = useSelector((state) => state.auth);
@@ -16,7 +16,7 @@ const NewTicket = () => {
   const navigate = useNavigate();
 
   const { isError, isSuccess, isLoading, message } = useSelector(
-    (state) => state.ticket
+    (state) => state.tickets
   );
 
   useEffect(() => {
@@ -49,9 +49,7 @@ const NewTicket = () => {
 
   return (
     <>
-      <Link to='/' className='btn btn-reverse btn-back'>
-        <FaArrowCircleLeft />
-      </Link>
+      <BackButton url='/' />
       <section className='heading'>
         <h1>Create New Ticket</h1>
         <p>Please fill out the form below</p>
