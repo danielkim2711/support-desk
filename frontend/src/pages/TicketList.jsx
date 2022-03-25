@@ -5,7 +5,7 @@ import TicketItem from '../components/TicketItem';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 
-const Tickets = () => {
+const TicketList = () => {
   const { tickets, isError, isSuccess, isLoading, message } = useSelector(
     (state) => state.tickets
   );
@@ -47,4 +47,4 @@ const Tickets = () => {
   );
 };
 
-export default Tickets;
+export default TicketList;

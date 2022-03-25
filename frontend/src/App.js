@@ -9,7 +9,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import NewTicket from './pages/NewTicket';
-import Tickets from './pages/Tickets';
+import TicketList from './pages/TicketList';
+import Ticket from './pages/Ticket';
 
 function App() {
   return (
@@ -25,7 +26,10 @@ function App() {
               <Route path='/new-ticket' element={<NewTicket />} />
             </Route>
             <Route path='/tickets' element={<PrivateRoute />}>
-              <Route path='/tickets' element={<Tickets />} />
+              <Route path='/tickets' element={<TicketList />} />
+            </Route>
+            <Route path='/ticket/:ticketId' element={<PrivateRoute />}>
+              <Route path='/ticket/:ticketId' element={<Ticket />} />
             </Route>
           </Routes>
         </div>
