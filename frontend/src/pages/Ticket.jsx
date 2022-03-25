@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTicket, reset } from '../features/tickets/ticketSlice';
+import { getTicket, closeTicket } from '../features/tickets/ticketSlice';
 import { toast } from 'react-toastify';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 
 const Ticket = () => {
-  const { ticket, isError, isSuccess, isLoading, message } = useSelector(
+  const { ticket, isError, isLoading, message } = useSelector(
     (state) => state.tickets
   );
   const { _id, product, description, status, createdAt } = ticket;
 
   const { ticketId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isError) {
@@ -24,8 +25,18 @@ const Ticket = () => {
     //eslint-disable-next-line
   }, [isError, message, ticketId]);
 
+  const handleClose = () => {
+    dispatch(closeTicket(ticketId));
+    toast.success('Ticket Closed');
+    navigate('/tickets');
+  };
+
   if (isLoading) {
     return <Spinner />;
+  }
+
+  if (isError) {
+    return <h3>Something went wrong...</h3>;
   }
 
   return (
@@ -37,12 +48,19 @@ const Ticket = () => {
           <span className={`status status-${status}`}>{status}</span>
         </h2>
         <h3>Date Submitted: {new Date(createdAt).toLocaleString('en-NZ')}</h3>
+        <h3>Product: {product}</h3>
         <hr />
         <div className='ticket-desc'>
           <h3>Description of Issue</h3>
           <p>{description}</p>
         </div>
       </header>
+
+      {ticket.status !== 'closed' && (
+        <button onClick={handleClose} className='btn btn-block btn-danger'>
+          Close Ticket
+        </button>
+      )}
     </div>
   );
 };
