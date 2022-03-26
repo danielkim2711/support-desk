@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTicket, closeTicket } from '../features/tickets/ticketSlice';
-import { getNotes, reset as notesReset } from '../features/notes/noteSlice';
+import {
+  getNotes,
+  addNote,
+  reset as notesReset,
+} from '../features/notes/noteSlice';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 import { FaPlus } from 'react-icons/fa';
@@ -59,7 +63,8 @@ const Ticket = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('submit');
+
+    dispatch(addNote({ noteText, ticketId }));
     closeModal();
   };
 
